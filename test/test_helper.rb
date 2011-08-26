@@ -3,8 +3,13 @@ require 'rubygems'
 require 'pathname'
 require 'test/unit'
 
-require 'yajl/json_gem'
-require 'sqlite3'
+if defined? RUBY_ENGINE and RUBY_ENGINE == 'jruby'
+  require 'jdbc/sqlite3'
+  require 'json'
+else
+  require 'sqlite3'
+  require 'yajl/json_gem'
+end
 
 require 'shoulda'
 require 'turn' unless ENV["TM_FILEPATH"] || ENV["CI"]

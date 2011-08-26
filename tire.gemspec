@@ -34,12 +34,18 @@ Gem::Specification.new do |s|
   # = Development dependencies
   #
   s.add_development_dependency "bundler",     "~> 1.0.0"
-  s.add_development_dependency "yajl-ruby",   "~> 0.8.0"
   s.add_development_dependency "shoulda"
   s.add_development_dependency "mocha"
   s.add_development_dependency "activerecord", "~> 3.0.7"
-  s.add_development_dependency "sqlite3"
   s.add_development_dependency "supermodel"
+
+  if defined? RUBY_ENGINE and RUBY_ENGINE == 'jruby'
+    s.add_development_dependency "jdbc-sqlite3"
+    s.add_development_dependency "json"
+  else
+    s.add_development_dependency "sqlite3"
+    s.add_development_dependency "yajl-ruby",  "~> 0.8.0"
+  end
 
   # These gems are not needed for CI at <http://travis-ci.org/#!/karmi/tire>
   #
