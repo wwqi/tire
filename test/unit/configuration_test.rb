@@ -23,19 +23,53 @@ module Tire
         assert_equal 'http://localhost:9200', Configuration.url
       end
 
-      should "use environment variable, if present" do
-        ENV['ELASTICSEARCH_URL'] = 'http://es.example.com'
-        assert_equal 'http://es.example.com', Configuration.url
-      end
-
       should "allow setting and retrieving the URL" do
         assert_nothing_raised { Configuration.url 'http://example.com' }
         assert_equal 'http://example.com', Configuration.url
+      end
+      
+      should "set the url from an environment variable, if present" do
+        ENV['ELASTICSEARCH_URL'] = 'http://es.example.com'
+        assert_equal 'http://es.example.com', Configuration.url
       end
 
       should "strip trailing slash from the URL" do
         assert_nothing_raised { Configuration.url 'http://slash.com:9200/' }
         assert_equal 'http://slash.com:9200', Configuration.url
+      end
+
+      should "return default global_index_name of nil" do
+        assert_nil Configuration.global_index_name
+      end
+
+      should "allow setting and retrieving the global_index_name" do
+        assert_nothing_raised { Configuration.global_index_name 'unique_key_or_name' }
+        assert_equal 'unique_key_or_name', Configuration.global_index_name 
+      end
+      
+      should "strip trailing slash from global_index_name" do
+        assert_nothing_raised { Configuration.global_index_name 'unique_key_or_name/' }
+        assert_equal 'unique_key_or_name', Configuration.global_index_name
+      end
+      
+      should "return default index_url of nil" do
+        assert_nil Configuration.index_url
+      end
+      
+      should "allow setting and retrieving of the index_url" do
+        assert_nothing_raised { Configuration.index_url 'http://es.example.com/chunky_bacon' }
+        assert_equal 'http://es.example.com/chunky_bacon', Configuration.index_url
+      end
+      
+      should "strip trailing slash from index_url" do
+        assert_nothing_raised { Configuration.index_url 'http://es.example.com/unique_key_or_name/' }
+        assert_equal 'http://es.example.com/unique_key_or_name', Configuration.index_url
+      end
+      
+      should "set the URL and global_index_name from index_url" do
+        assert_nothing_raised { Configuration.index_url 'http://es.example.com/unique_key_or_name' }
+        assert_equal 'http://es.example.com', Configuration.url
+        assert_equal 'unique_key_or_name', Configuration.global_index_name
       end
 
       should "return default client" do

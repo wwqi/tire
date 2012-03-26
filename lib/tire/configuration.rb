@@ -1,9 +1,26 @@
+require "uri"
+
 module Tire
 
   class Configuration
 
     def self.url(value=nil)
       @url = (value ? value.to_s.gsub(%r|/*$|, '') : nil) || @url || ENV['ELASTICSEARCH_URL'] || "http://localhost:9200"
+    end
+    
+    def self.global_index_name(name=nil)
+      return @global_index_name = name.to_s.gsub(%r|/*$|, '') if name
+      @global_index_name || nil
+    end
+    
+    def self.index_url(value=nil)
+      if value
+        @index_url = value.to_s.gsub(%r|/*$|, '')
+        uri = URI(@index_url)
+        self.url( "http://#{uri.host}" )
+        self.global_index_name( uri.path[1..-1] )
+      end
+      @index_url || nil
     end
 
     def self.client(klass=nil)
