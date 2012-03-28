@@ -12,6 +12,10 @@ module Tire
         # By default, uses ActiveSupport inflection, so a class named `Article`
         # will be stored in the `articles` index.
         #
+        # If the global_index_name configuration option is set for Tire, then
+        # the global_index_name will override the ActiveSupport inflected
+        # index name.
+        #
         # To get the index name:
         #
         #     Article.index_name
@@ -31,6 +35,7 @@ module Tire
           @index_name = name if name
           @index_name = block if block_given?
           # TODO: Try to get index_name from ancestor classes
+          @index_name = Tire::Configuration.global_index_name if Tire::Configuration.global_index_name
           @index_name || [index_prefix, klass.model_name.plural].compact.join('_')
         end
 
