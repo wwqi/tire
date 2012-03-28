@@ -44,7 +44,7 @@ namespace :tire do
 
     params.update :method => 'paginate'
 
-    index = Tire::Index.new( ENV['INDEX'] || klass.tire.index.name )
+    index = Tire::Index.new( ENV['INDEX'] || Tire::Configuration.global_index_name || klass.tire.index.name )
 
     if ENV['FORCE']
       puts "[IMPORT] Deleting index '#{index.name}'"
